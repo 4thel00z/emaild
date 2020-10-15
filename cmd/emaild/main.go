@@ -2,14 +2,14 @@ package main
 
 import (
 	"context"
+	"emaild/pkg/libemail"
+	"emaild/pkg/libemail/debug"
 	"flag"
 	"github.com/logrusorgru/aurora"
 	"github.com/monzo/typhon"
 	"log"
 	"os"
 	"os/signal"
-	"emaild/pkg/libemail"
-	"emaild/pkg/libemail/debug"
 	"strconv"
 	"syscall"
 	"time"
