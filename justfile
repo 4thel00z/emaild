@@ -34,6 +34,15 @@ build-win: dep ## Build the binary file
 run *ARGS: build
 	@build/emaild {{ARGS}}
 
+build-gmail-token:
+	@env CGO_ENABLED=0 GOOS=linux GOARCH=amd64 go build -o build/gmail-token cmd/gmail-token/main.go
+
+build-gmail-token-win:
+	@env CGO_ENABLED=0 GOOS=368 GOARCH=windows go build -o build/gmail-token cmd/gmail-token/main.go
+
+run-gmail-token *ARGS: build-gmail-token
+	@build/gmail-token {{ARGS}}
+
 clean: ## Remove previous build
 	@rm -f build/*
 
