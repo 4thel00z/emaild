@@ -54,6 +54,11 @@ func TestGmailSenderSend(t *testing.T) {
 		t.Fatal("GMAIL_TOKEN_CONFIG_PATH env was not set!")
 	}
 
+	gmailTo, found := os.LookupEnv("GMAIL_TO")
+	if !found {
+		t.Fatal("GMAIL_TO env (which is who will receive the email send out by the test) was not set!")
+	}
+
 	creds, err := ioutil.ReadFile(credsPath)
 	if err != nil {
 		t.Fatal(err)
@@ -77,7 +82,7 @@ func TestGmailSenderSend(t *testing.T) {
 	}
 	body := libemail.Base64("VGVzdCBFbWFpbAo=")
 	message := &libemail.Email{
-		To:      []string{"4thel00z@gmail.com"},
+		To:      []string{gmailTo},
 		Subject: "Emaild Test email",
 		Body:    &body,
 	}
