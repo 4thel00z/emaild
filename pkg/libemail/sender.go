@@ -9,8 +9,9 @@ import (
 type SmartString string
 type Base64 SmartString
 
-func (val *Base64) Unpack() string {
-	return base64.StdEncoding.EncodeToString([]byte(*val))
+func (val *Base64) Unpack() (string,error) {
+	decodeString, err := base64.StdEncoding.DecodeString(string(*val))
+	return string(decodeString),err
 }
 
 func (val *Base64) UnmarshalJSON(b []byte) error {
