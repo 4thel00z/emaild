@@ -1,6 +1,8 @@
 package debug
 
-import "emaild/pkg/libemail"
+import (
+	"emaild/pkg/libemail"
+)
 
 type Debug struct{}
 
@@ -16,6 +18,7 @@ func (Y Debug) Namespace() string {
 	return "debug"
 }
 
+
 func (Y Debug) Routes() []libemail.Route {
 	return []libemail.Route{
 		// Add route definitions here
@@ -23,6 +26,12 @@ func (Y Debug) Routes() []libemail.Route {
 			Path:        "routes",
 			Method:      "GET",
 			CurlExample: "curl http://<addr>/<version>/<namespace>/routes",
+		},
+		{
+			Path:        "validator_test",
+			Method:      "POST",
+			CurlExample: "curl -X POST http://<addr>/<version>/<namespace>/validator_test",
+			Validator:   libemail.GenerateJSONValidator(PostValidatorTestRequest{}),
 		},
 	}
 }
