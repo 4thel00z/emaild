@@ -3,15 +3,16 @@ package libemail
 import (
 	"encoding/base64"
 	"encoding/json"
+	"errors"
 	"golang.org/x/oauth2"
 )
 
 type SmartString string
 type Base64 SmartString
 
-func (val *Base64) Unpack() (string,error) {
+func (val *Base64) Unpack() (string, error) {
 	decodeString, err := base64.StdEncoding.DecodeString(string(*val))
-	return string(decodeString),err
+	return string(decodeString), err
 }
 
 func (val *Base64) UnmarshalJSON(b []byte) error {
@@ -39,9 +40,9 @@ func (val *SmartString) String() string {
 
 type Email struct {
 	// Which of the accounts registered via the pool module you want to schedule on
-	Account     string   `json:"account"`
-	To          []string `json:"to"`
-	From        string   `json:"from"`
+	Account     string   `json:"account" validate:"empty=false"`
+	To          []string `json:"to" validate:"empty=false"`
+	From        string   `json:"from" validate:"empty=false"`
 	Cc          []string `json:"cc"`
 	Bcc         []string `json:"bcc"`
 	Subject     string   `json:"subject"`
@@ -54,7 +55,14 @@ type Email struct {
 	HTML *Base64      `json:"html,omitempty"`
 	File *SmartString `json:"file,omitempty"`
 	// delay in seconds from now
-	Delay int `json:"delay"`
+	Delay int `json:"delay" validate:"gte=0"`
+}
+
+func (e Email) Validate() error {
+	if e.Body == nil && e.HTML == nil {
+		return errors.New("one of email.Body and email.File should be non nil")
+	}
+	return nil
 }
 
 type Sender interface {
