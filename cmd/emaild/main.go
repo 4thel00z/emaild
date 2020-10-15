@@ -4,6 +4,7 @@ import (
 	"context"
 	"emaild/pkg/libemail"
 	"emaild/pkg/libemail/debug"
+	"emaild/pkg/libemail/filters"
 	"flag"
 	"github.com/logrusorgru/aurora"
 	"github.com/monzo/typhon"
@@ -51,7 +52,8 @@ func main() {
 
 	svc := app.Router.Serve().
 		Filter(typhon.ErrorFilter).
-		Filter(typhon.H2cFilter)
+		Filter(typhon.H2cFilter).
+		Filter(filters.Validation(app))
 	srv, err := typhon.Listen(svc, addr)
 	if err != nil {
 		panic(err)
