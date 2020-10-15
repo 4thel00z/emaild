@@ -61,7 +61,7 @@ func (app App) Routes() []Route {
 			if app.Debug {
 				// Add module wise injections of f.e. the <auth> tag
 			}
-			route.longPath = module.LongPath(route)
+			route.LongPath = module.LongPath(route)
 			routes = append(routes, route)
 
 		}
@@ -74,7 +74,7 @@ func (app App) PrintRoutes(addr string) {
 		log.Println("👠\tThe routes 🛣️  are:")
 	}
 	for _, route := range routes {
-		log.Printf("\thttp://%v%s with method: %s", addr, route.longPath, route.Method)
+		log.Printf("\thttp://%v%s with method: %s", addr, route.LongPath, route.Method)
 		log.Printf("\tQuery this endpoint like this:\n\t\t%s", route.CurlExample)
 
 	}

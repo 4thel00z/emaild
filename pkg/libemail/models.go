@@ -8,6 +8,11 @@ import (
 	"strings"
 )
 
+type GenericResponse struct {
+	Message interface{} `json:"message"`
+	Error   *string     `json:"error,omitempty"`
+}
+
 func ParseConfig(path string) (config Config, err error) {
 	file, err := os.Open(path)
 	if err != nil {
@@ -29,12 +34,14 @@ type Config struct {
 }
 
 type Service func(app App) typhon.Service
+type Validator func(request typhon.Request) error
 
 type Route struct {
 	Path        string `json:"path"`
 	Method      string `json:"method"`
 	CurlExample string `json:"curl_example"`
-	longPath    string
+	LongPath    string
+	Validator   *Validator
 }
 
 type Module interface {
