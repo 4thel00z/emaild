@@ -17,7 +17,7 @@ type GmailSender struct {
 	Service *gmail.Service
 }
 
-func (g GmailSender) Init(config *oauth2.Config, token *oauth2.Token) error {
+func (g *GmailSender) Init(config *oauth2.Config, token *oauth2.Token) error {
 	log.Printf("GmailSender.Init(%v,%v)\n", config, token)
 	service, err := gmail.NewService(context.Background(), option.WithHTTPClient(config.Client(context.Background(), token)))
 	if err != nil {
@@ -27,15 +27,17 @@ func (g GmailSender) Init(config *oauth2.Config, token *oauth2.Token) error {
 	return nil
 }
 
-func (g GmailSender) Cleanup() error {
+func (g *GmailSender) Cleanup() error {
 	log.Println("GmailSender.Cleanup()")
 	return nil
 }
 
-func (g GmailSender) Send(message *libemail.Email) error {
+func (g *GmailSender) Send(message *libemail.Email) error {
 	header := make(map[string]string)
 	header["From"] = message.From
 	header["To"] = strings.Join(message.To, ";")
+	header["Cc"] = strings.Join(message.Cc, ";")
+	header["Bcc"] = strings.Join(message.Bcc, ";")
 	header["Subject"] = message.Subject
 	header["MIME-Version"] = "1.0"
 	header["Content-Type"] = "text/plain; charset=\"utf-8\""
@@ -44,11 +46,19 @@ func (g GmailSender) Send(message *libemail.Email) error {
 	var payload string
 
 	if message.Body != nil {
-		payload = message.Body.Unpack()
+		unpacked, err := message.Body.Unpack()
+		if err != nil {
+			return err
+		}
+		payload = unpacked
 	} else if message.HTML != nil {
-		payload = message.HTML.Unpack()
-		header["Content-Type"] = "text/html; charset=\"utf-8\""
+		unpacked, err := message.HTML.Unpack()
+		if err != nil {
+			return err
+		}
+		payload = unpacked
 
+		header["Content-Type"] = "text/html; charset=\"utf-8\""
 	} else {
 		return errors.New("message.Body or message.HTML must be set. message.File not supported as of now")
 	}
