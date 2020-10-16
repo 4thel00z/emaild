@@ -10,16 +10,19 @@ var (
 	Module = Debug{}
 )
 
-func (Y Debug) Version() string {
+const (
+	Namespace = "debug"
+)
+
+func (d Debug) Version() string {
 	return "v1"
 }
 
-func (Y Debug) Namespace() string {
-	return "debug"
+func (d Debug) Namespace() string {
+	return Namespace
 }
 
-
-func (Y Debug) Routes() []libemail.Route {
+func (d Debug) Routes() []libemail.Route {
 	return []libemail.Route{
 		// Add route definitions here
 		{
@@ -35,7 +38,7 @@ func (Y Debug) Routes() []libemail.Route {
 		},
 	}
 }
-func (Y Debug) HandlerById(i int) libemail.Service {
+func (d Debug) HandlerById(i int) libemail.Service {
 	switch i {
 	// Add handlers for routes here
 	case 0:
@@ -45,6 +48,6 @@ func (Y Debug) HandlerById(i int) libemail.Service {
 	return nil
 }
 
-func (Y Debug) LongPath(route libemail.Route) string {
-	return libemail.DefaultLongPath(Y, route)
+func (d Debug) LongPath(route libemail.Route) string {
+	return libemail.DefaultLongPath(d, route)
 }
