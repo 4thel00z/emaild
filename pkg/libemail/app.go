@@ -9,9 +9,9 @@ import (
 )
 
 type App struct {
-	Addr    string   `json:"addr"`
-	Config  Config   `json:"config"`
-	Modules []Module `json:"modules"`
+	Addr    string            `json:"addr"`
+	Config  Config            `json:"config"`
+	Modules map[string]Module `json:"modules"`
 	Router  *typhon.Router
 	Debug   bool
 	Verbose bool
@@ -19,10 +19,15 @@ type App struct {
 
 func NewApp(addr string, config Config, verbose, debug bool, modules ...Module) App {
 
+	moduleMap := make(map[string]Module)
+	for _, module := range modules {
+		moduleMap[module.Namespace()] = module
+	}
+
 	app := App{
 		Addr:    addr,
 		Config:  config,
-		Modules: modules,
+		Modules: moduleMap,
 		Debug:   debug,
 		Verbose: verbose,
 	}
