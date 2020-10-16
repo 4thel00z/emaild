@@ -7,6 +7,6 @@
   "subject": "I want to show you something wicked",
   "sender": "Me",
   "delay": 0,
-  "body": "Some really cool stuff"
+  "html": "<p>this is cool<p><h1>and it works son yo!</h1>"
 }
 
