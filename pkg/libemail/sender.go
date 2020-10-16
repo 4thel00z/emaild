@@ -3,7 +3,6 @@ package libemail
 import (
 	"encoding/base64"
 	"encoding/json"
-	"errors"
 	"golang.org/x/oauth2"
 )
 
@@ -56,13 +55,6 @@ type Email struct {
 	File *SmartString `json:"file,omitempty"`
 	// delay in seconds from now
 	Delay int `json:"delay" validate:"gte=0"`
-}
-
-func (e Email) Validate() error {
-	if e.Body == nil && e.HTML == nil {
-		return errors.New("one of email.Body and email.File should be non nil")
-	}
-	return nil
 }
 
 type Sender interface {
