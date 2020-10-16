@@ -30,7 +30,7 @@ func (Y Debug) Routes() []libemail.Route {
 		{
 			Path:        "validator_test",
 			Method:      "POST",
-			CurlExample: "curl -X POST http://<addr>/<version>/<namespace>/validator_test",
+			CurlExample: "curl -X POST --data '{\"has_to_be_there\":\"something\"}' http://<addr>/<version>/<namespace>/validator_test",
 			Validator:   libemail.GenerateJSONValidator(PostValidatorTestRequest{}),
 		},
 	}
