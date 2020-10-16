@@ -1,36 +1,97 @@
-package email
+package gmail
 
 import (
 	"emaild/pkg/libemail"
+	"emaild/pkg/libemail/senders"
+	"errors"
+	"golang.org/x/oauth2"
 )
 
-type Email struct{}
+type Gmail struct {
+	Sender *senders.GmailSender
+}
 
-var (
-	Module = Email{}
+func (g Gmail) Send(message *PostSendGmailRequest) (interface{}, error) {
+	email := libemail.Email{
+		Account:     message.Account,
+		To:          message.To,
+		From:        message.From,
+		Cc:          message.Cc,
+		Bcc:         message.Bcc,
+		Subject:     message.Subject,
+		ReplyTo:     message.ReplyTo,
+		Sender:      message.Sender,
+		Attachments: message.Attachments,
+		Body:        message.Body,
+		HTML:        message.HTML,
+		File:        message.File,
+		Delay:       message.Delay,
+	}
+
+	return g.Sender.Send(&email)
+}
+
+type Option func(e *Gmail) error
+
+func WithTokenConfig(config *oauth2.Config, token *oauth2.Token) Option {
+	return func(e *Gmail) error {
+		sender := &senders.GmailSender{}
+		err := sender.Init(config, token)
+		if err != nil {
+			return err
+		}
+		e.Sender = sender
+		return nil
+	}
+}
+
+func WithGmailSender(sender *senders.GmailSender) Option {
+	return func(e *Gmail) error {
+		e.Sender = sender
+		return nil
+	}
+}
+
+func NewModule(opts ...Option) (*Gmail, error) {
+	g := &Gmail{}
+	for _, opt := range opts {
+		// Call the option giving the instantiated
+		// *House as the argument
+		err := opt(g)
+		if err != nil {
+			return nil, err
+		}
+	}
+	if g.Sender == nil {
+		return nil, errors.New("the gmail module cannot have a nil sender")
+	}
+
+	return g, nil
+}
+
+const (
+	Namespace = "gmail"
 )
 
-func (e Email) Version() string {
+func (e Gmail) Version() string {
 	return "v1"
 }
 
-func (e Email) Namespace() string {
-	return "email"
+func (e Gmail) Namespace() string {
+	return Namespace
 }
 
-
-func (e Email) Routes() []libemail.Route {
+func (e Gmail) Routes() []libemail.Route {
 	return []libemail.Route{
-
 		{
 			Path:        "send",
 			Method:      "POST",
-			CurlExample: "curl -X POST -d @examples/send_email.json  http://0.0.0.0:1337/v1/email/send",
-			Validator:   libemail.GenerateJSONValidator(PostSendEmailRequest{}),
+			CurlExample: "curl -X POST -d @examples/send_email.json  http://0.0.0.0:1337/v1/gmail/send",
+			Validator:   libemail.GenerateJSONValidator(PostSendGmailRequest{}),
 		},
 	}
 }
-func (e Email) HandlerById(i int) libemail.Service {
+func (e Gmail) HandlerById(i int) libemail.Service {
 	switch i {
 	// Add handlers for routes here
 	case 0:
@@ -40,6 +101,6 @@ func (e Email) HandlerById(i int) libemail.Service {
 	return nil
 }
 
-func (e Email) LongPath(route libemail.Route) string {
+func (e Gmail) LongPath(route libemail.Route) string {
 	return libemail.DefaultLongPath(e, route)
 }

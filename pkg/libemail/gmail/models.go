@@ -1,5 +1,5 @@
-package email
+package gmail
 
 import "emaild/pkg/libemail"
 
-type PostSendEmailRequest libemail.Email
+type PostSendGmailRequest libemail.Email
