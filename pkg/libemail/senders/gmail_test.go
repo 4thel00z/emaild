@@ -2,6 +2,7 @@ package senders
 
 import (
 	"emaild/pkg/libemail"
+	"fmt"
 	"golang.org/x/oauth2/google"
 	"google.golang.org/api/gmail/v1"
 	"io/ioutil"
@@ -56,7 +57,7 @@ func TestGmailSenderSend(t *testing.T) {
 
 	gmailTo, found := os.LookupEnv("GMAIL_TO")
 	if !found {
-		t.Fatal("GMAIL_TO env (which is who will receive the email send out by the test) was not set!")
+		t.Fatal("GMAIL_TO env (which is who will receive the gmail send out by the test) was not set!")
 	}
 
 	creds, err := ioutil.ReadFile(credsPath)
@@ -83,11 +84,14 @@ func TestGmailSenderSend(t *testing.T) {
 	body := libemail.Base64("VGVzdCBFbWFpbAo=")
 	message := &libemail.Email{
 		To:      []string{gmailTo},
-		Subject: "Emaild Test email",
+		Subject: "Emaild Test gmail",
 		Body:    &body,
 	}
-	err = g.Send(message)
+	response, err := g.Send(message)
 	if err != nil {
 		t.Fatal(err)
 	}
+
+	fmt.Printf("successfully sent: %v\n", response)
+
 }

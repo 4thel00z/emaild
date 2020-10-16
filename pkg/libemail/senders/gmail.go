@@ -32,7 +32,7 @@ func (g *GmailSender) Cleanup() error {
 	return nil
 }
 
-func (g *GmailSender) Send(message *libemail.Email) error {
+func (g *GmailSender) Send(message *libemail.Email) (interface{}, error) {
 	header := make(map[string]string)
 	header["From"] = message.From
 	header["To"] = strings.Join(message.To, ";")
@@ -46,21 +46,12 @@ func (g *GmailSender) Send(message *libemail.Email) error {
 	var payload string
 
 	if message.Body != nil {
-		unpacked, err := message.Body.Unpack()
-		if err != nil {
-			return err
-		}
-		payload = unpacked
+		payload = *message.Body
 	} else if message.HTML != nil {
-		unpacked, err := message.HTML.Unpack()
-		if err != nil {
-			return err
-		}
-		payload = unpacked
-
+		payload = *message.HTML
 		header["Content-Type"] = "text/html; charset=\"utf-8\""
 	} else {
-		return errors.New("message.Body or message.HTML must be set. message.File not supported as of now")
+		return nil, errors.New("message.Body or message.HTML must be set. message.File not supported as of now")
 	}
 
 	var msg string
@@ -73,8 +64,7 @@ func (g *GmailSender) Send(message *libemail.Email) error {
 		Raw: base64.RawURLEncoding.EncodeToString([]byte(msg)),
 	}).Do()
 	if err != nil {
-		return err
+		return nil, err
 	}
-	fmt.Printf("successfully sent: %v\n", response)
-	return nil
+	return response, nil
 }

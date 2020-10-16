@@ -50,9 +50,9 @@ type Email struct {
 	Sender      string   `json:"sender"`
 	Attachments []string `json:"attachments"`
 	//base64 encoded
-	Body *Base64 `json:"body,omitempty"`
+	Body *string `json:"body,omitempty"`
 	//base64 encoded
-	HTML *Base64      `json:"html,omitempty"`
+	HTML *string      `json:"html,omitempty"`
 	File *SmartString `json:"file,omitempty"`
 	// delay in seconds from now
 	Delay int `json:"delay" validate:"gte=0"`
@@ -68,5 +68,5 @@ func (e Email) Validate() error {
 type Sender interface {
 	Init(config *oauth2.Config, token *oauth2.Token) error
 	Cleanup() error
-	Send(message *Email) error
+	Send(message *Email) (interface{}, error)
 }
