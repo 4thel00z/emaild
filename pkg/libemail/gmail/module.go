@@ -8,6 +8,7 @@ import (
 )
 
 type Gmail struct {
+	Debug  bool
 	Sender *senders.GmailSender
 }
 
@@ -33,21 +34,29 @@ func (g Gmail) Send(message *PostSendGmailRequest) (interface{}, error) {
 
 type Option func(e *Gmail) error
 
+func WithDebug(debug bool) Option {
+	return func(g *Gmail) error {
+		g.Debug = debug
+		return nil
+	}
+}
+
 func WithTokenConfig(config *oauth2.Config, token *oauth2.Token) Option {
-	return func(e *Gmail) error {
-		sender := &senders.GmailSender{}
+	return func(g *Gmail) error {
+		sender := &senders.GmailSender{Debug: g.Debug}
 		err := sender.Init(config, token)
 		if err != nil {
 			return err
 		}
-		e.Sender = sender
+		g.Sender = sender
 		return nil
 	}
 }
 
 func WithGmailSender(sender *senders.GmailSender) Option {
-	return func(e *Gmail) error {
-		e.Sender = sender
+	return func(g *Gmail) error {
+		g.Sender = sender
+		sender.Debug = g.Debug
 		return nil
 	}
 }

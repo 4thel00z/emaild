@@ -15,10 +15,13 @@ import (
 
 type GmailSender struct {
 	Service *gmail.Service
+	Debug bool
 }
 
 func (g *GmailSender) Init(config *oauth2.Config, token *oauth2.Token) error {
-	log.Printf("GmailSender.Init(%v,%v)\n", config, token)
+	if g.Debug{
+		log.Printf("GmailSender.Init(%v,%v)\n", config, token)
+	}
 	service, err := gmail.NewService(context.Background(), option.WithHTTPClient(config.Client(context.Background(), token)))
 	if err != nil {
 		return err

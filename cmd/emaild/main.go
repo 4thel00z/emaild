@@ -77,7 +77,7 @@ func main() {
 				log.Fatalf("Unable to parse google auth token file: %e", err)
 			}
 
-			module, err := internalGmail.NewModule(internalGmail.WithTokenConfig(config, token))
+			module, err := internalGmail.NewModule(internalGmail.WithDebug(*debugFlag), internalGmail.WithTokenConfig(config, token))
 			if err != nil {
 				log.Fatal(err)
 			}
