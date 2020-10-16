@@ -34,7 +34,7 @@ type Config struct {
 }
 
 type Service func(app App) typhon.Service
-type Validator func(request typhon.Request) error
+type Validator func(request typhon.Request) (interface{}, error)
 
 type Route struct {
 	Path        string `json:"path"`

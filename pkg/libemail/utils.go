@@ -22,11 +22,11 @@ func GenerateJSONValidator(i interface{}) *Validator {
 	t := reflect.TypeOf(i)
 	toValidate := reflect.New(t).Interface()
 
-	validator := func(r typhon.Request) error {
+	validator := func(r typhon.Request) (interface{}, error) {
 
 		content, err := ioutil.ReadAll(r.Body)
 		if err != nil {
-			return err
+			return nil, err
 		}
 
 		// As if nothing has ever happened .. ( ͡° ͜ʖ ͡°)
@@ -35,16 +35,16 @@ func GenerateJSONValidator(i interface{}) *Validator {
 		err = json.Unmarshal(content, &toValidate)
 
 		if err != nil {
-			return err
+			return nil, err
 		}
 
 		err = validate.Validate(toValidate)
 
 		if err != nil {
-			return err
+			return nil, err
 		}
 
-		return nil
+		return toValidate, nil
 	}
 
 	return (*Validator)(&validator)

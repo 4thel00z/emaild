@@ -1,11 +1,14 @@
 package filters
 
 import (
+	"context"
 	"emaild/pkg/libemail"
 	"fmt"
 	"github.com/monzo/typhon"
 )
-
+const (
+	ValidationResult ="validation_result"
+)
 func Validation(app libemail.App) typhon.Filter {
 	return func(req typhon.Request, svc typhon.Service) typhon.Response {
 		pattern := app.Router.Pattern(req)
@@ -18,7 +21,7 @@ func Validation(app libemail.App) typhon.Filter {
 				return svc(req)
 			}
 
-			err := (*route.Validator)(req)
+			val, err := (*route.Validator)(req)
 
 			if err != nil {
 				msg := err.Error()
@@ -27,6 +30,9 @@ func Validation(app libemail.App) typhon.Filter {
 					Error:   &msg,
 				})
 			}
+
+			req.Context = context.WithValue(req.Context, ValidationResult, val)
+			return svc(req)
 		}
 
 		return svc(req)
