@@ -9,6 +9,16 @@ import (
 	"os"
 )
 
+func LoadToken(path string) (*oauth2.Token, error) {
+
+	file, err := os.Open(path)
+	if err != nil {
+		return nil, err
+	}
+	defer file.Close()
+	return TokenFromReader(file)
+}
+
 func TokenFromReader(r io.Reader) (*oauth2.Token, error) {
 	token := &oauth2.Token{}
 	err := json.NewDecoder(r).Decode(token)
