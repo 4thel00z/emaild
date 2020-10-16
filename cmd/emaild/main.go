@@ -4,6 +4,7 @@ import (
 	"context"
 	"emaild/pkg/libemail"
 	"emaild/pkg/libemail/debug"
+	"emaild/pkg/libemail/email"
 	"emaild/pkg/libemail/filters"
 	"flag"
 	"github.com/logrusorgru/aurora"
@@ -48,7 +49,7 @@ func main() {
 		log.Fatalf("could not parse the configuration because of: %s", err.Error())
 	}
 	addr := *host + ":" + strconv.Itoa(*port)
-	app := libemail.NewApp(addr, config, *verbose, *debugFlag, debug.Module)
+	app := libemail.NewApp(addr, config, *verbose, *debugFlag, debug.Module, email.Module)
 
 	svc := app.Router.Serve().
 		Filter(typhon.ErrorFilter).
