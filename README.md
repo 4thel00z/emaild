@@ -18,6 +18,8 @@ emaild is a cool email daemon 😎 which can:
 Furthermore you can find the `gmail-token` binary also in this repository.
 It makes it easy to generate a token for the gmail module of emaild to work:
 
+![emaild in action](https://asciinema.org/a/WEMHnuuj7yXHf7pHEsNOt8gEB)
+
 ## Installation
 
 ```
