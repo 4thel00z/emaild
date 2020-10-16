@@ -25,8 +25,7 @@ func (e Email) Routes() []libemail.Route {
 		{
 			Path:        "send",
 			Method:      "POST",
-			//TODO: add example in examples folder
-			CurlExample: "curl -X POST http://<addr>/<version>/<namespace>/send",
+			CurlExample: "curl -X POST -d @examples/send_email.json  http://0.0.0.0:1337/v1/email/send",
 			Validator:   libemail.GenerateJSONValidator(PostSendEmailRequest{}),
 		},
 	}
