@@ -55,11 +55,6 @@ It will save the token to a file called `token.json` if you did not specify anot
 - Document the interface
 - Provide a client
 
+## License
 
-## Architecture
-
-TBD
-
-## Contribution guide
-
-TBD
+This project is licensed under the GPL-3 license.
