@@ -81,7 +81,8 @@ func TestGmailSenderSend(t *testing.T) {
 	if err != nil {
 		t.Fatal(err)
 	}
-	body := libemail.Base64("VGVzdCBFbWFpbAo=")
+
+	body := "Hello from emaild!"
 	message := &libemail.Email{
 		To:      []string{gmailTo},
 		Subject: "Emaild Test gmail",
