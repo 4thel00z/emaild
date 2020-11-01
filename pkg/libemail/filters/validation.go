@@ -7,7 +7,7 @@ import (
 	"github.com/monzo/typhon"
 )
 const (
-	ValidationResult ="validation_result"
+	ValidationResult = "validation_result"
 )
 func Validation(app libemail.App) typhon.Filter {
 	return func(req typhon.Request, svc typhon.Service) typhon.Response {
