@@ -1,12 +1,6 @@
 # emaild
 
-## TOC
-
-* Description
-* Installation
-* Configuration
-    * Generate an email token
-* Contribution guide
+![emaild-tests](https://github.com/4thel00z/emaild/workflows/Test/badge.svg)
 
 ## Description
 
