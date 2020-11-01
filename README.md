@@ -1,6 +1,7 @@
 # emaild
 
 ![emaild-tests](https://github.com/4thel00z/emaild/workflows/Test/badge.svg)
+![emaild-logo](https://github.com/4thel00z/emaild/raw/assets/logo.svg)
 
 ## Description
 
