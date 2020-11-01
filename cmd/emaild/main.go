@@ -48,8 +48,8 @@ var (
 func main() {
 	flag.Parse()
 
-	log.Println("\n", aurora.Magenta(banner), "\n")
-	log.Println("👩	Version:", version)
+	log.Println("\n", aurora.Magenta(banner))
+	log.Println("\n👩	Version:", version)
 
 	config, err := libemail.ParseConfig(*configPath)
 	if err != nil {
