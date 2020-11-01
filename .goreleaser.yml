@@ -5,6 +5,7 @@ builds:
     # Default is `.`.
     main: ./cmd/emaild/main.go
     id: emaild
+    binary: emaild
     # Set the modified timestamp on the output binary, typically
     # you would do this to ensure a build was reproducible. Pass
     # empty string to skip modifying the output.
@@ -12,7 +13,7 @@ builds:
     mod_timestamp: '{{ .CommitTimestamp }}'
   -
     main: ./cmd/gmail-token/main.go
-
+    binary: gmail-token
     id: gmail-token
     # Set the modified timestamp on the output binary, typically
     # you would do this to ensure a build was reproducible. Pass
