@@ -11,6 +11,14 @@ builds:
     # empty string to skip modifying the output.
     # Default is empty string.
     mod_timestamp: '{{ .CommitTimestamp }}'
+    goos:
+      - linux
+      - darwin
+      - windows
+    goarch:
+      - amd64
+      - arm
+      - arm64
   -
     main: ./cmd/gmail-token/main.go
     binary: gmail-token
@@ -20,4 +28,11 @@ builds:
     # empty string to skip modifying the output.
     # Default is empty string.
     mod_timestamp: '{{ .CommitTimestamp }}'
-
+    goos:
+      - linux
+      - darwin
+      - windows
+    goarch:
+      - amd64
+      - arm
+      - arm64
